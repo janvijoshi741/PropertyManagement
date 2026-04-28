@@ -27,7 +27,7 @@ export function AdminRequestsPage() {
   const handleUpdateStatus = () => {
     if (updateDialog.request && newStatus) {
       updateStatus.mutate(
-        { id: updateDialog.request.id, status: newStatus },
+        { id: updateDialog.request.id, status: newStatus as any },
         { onSuccess: () => setUpdateDialog({ open: false, request: null }) }
       );
     }
@@ -105,7 +105,7 @@ export function AdminRequestsPage() {
           <DialogHeader>
             <DialogTitle>Update Request Status</DialogTitle>
           </DialogHeader>
-          <Select value={newStatus} onValueChange={setNewStatus}>
+          <Select value={newStatus} onValueChange={(val: any) => setNewStatus(val || '')}>
             <SelectTrigger>
               <SelectValue />
             </SelectTrigger>
@@ -120,7 +120,7 @@ export function AdminRequestsPage() {
               Cancel
             </Button>
             <Button
-              className="bg-emerald-600 hover:bg-emerald-700"
+              className="bg-primary hover:bg-primary/90"
               onClick={handleUpdateStatus}
               disabled={updateStatus.isPending}
             >

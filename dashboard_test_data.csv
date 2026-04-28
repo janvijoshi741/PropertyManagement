@@ -1,0 +1,4 @@
+external_ref,address_line1,address_line2,city,postcode,property_type,customer_email,invoice_number,invoice_amount,invoice_status,invoice_issue_date,invoice_due_date
+EXT001,"123 Sample Street","Suite 100","London","W1A 1AA","Commercial","janvij@200oksolutions.com","INV-2024-001",1250.00,"unpaid","2024-04-01","2024-05-01"
+EXT002,"456 Resident Lane",,"Manchester","M1 1AA","Residential","tenant.test@example.com","INV-2024-002",850.50,"overdue","2024-03-15","2024-04-15"
+EXT003,"789 Business Park","Block B","Birmingham","B1 1AA","Industrial","admin@test-brand.com","INV-2024-003",3500.00,"paid","2024-04-10","2024-05-10"

@@ -17,7 +17,7 @@ export function AdminDashboardPage() {
 
   const statCards = [
     { label: 'Total Customers', value: stats?.totalCustomers || 0, icon: Users, color: 'bg-blue-50 text-blue-600' },
-    { label: 'Active Properties', value: stats?.activeProperties || 0, icon: Building2, color: 'bg-emerald-50 text-emerald-600' },
+    { label: 'Active Properties', value: stats?.activeProperties || 0, icon: Building2, color: 'bg-primary/10 text-primary' },
     { label: 'Open Requests', value: stats?.openRequests || 0, icon: MessageSquare, color: 'bg-amber-50 text-amber-600' },
     { label: 'Imports Run', value: stats?.importsRun || 0, icon: Upload, color: 'bg-purple-50 text-purple-600' },
   ];

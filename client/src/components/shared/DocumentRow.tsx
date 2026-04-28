@@ -58,11 +58,14 @@ export function StatementRow({ statement }: StatementRowProps) {
           <Eye className="h-4 w-4 mr-1" /> View
         </Button>
         {statement.document_url && (
-          <Button variant="ghost" size="sm" asChild className="ml-1">
-            <a href={statement.document_url} target="_blank" rel="noopener noreferrer">
-              <Download className="h-4 w-4" />
-            </a>
-          </Button>
+          <a
+            href={statement.document_url}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="group/button inline-flex shrink-0 items-center justify-center rounded-lg border border-transparent bg-clip-padding text-sm font-medium whitespace-nowrap transition-all outline-none select-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 active:translate-y-px disabled:pointer-events-none disabled:opacity-50 h-7 gap-1 px-2.5 text-[0.8rem] ml-1 hover:bg-muted hover:text-foreground"
+          >
+            <Download className="h-4 w-4" />
+          </a>
         )}
       </td>
     </tr>

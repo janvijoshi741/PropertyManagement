@@ -1,7 +1,7 @@
 export interface JwtPayload {
   userId: string;
   email: string;
-  role: 'customer' | 'admin';
+  role: 'customer' | 'admin' | 'master_admin';
   tenantId: string;
 }
 
@@ -10,7 +10,7 @@ export interface UserRecord {
   tenant_id: string;
   email: string;
   password_hash: string | null;
-  role: 'customer' | 'admin';
+  role: 'customer' | 'admin' | 'master_admin';
   is_active: boolean;
   created_at: string;
   updated_at: string;

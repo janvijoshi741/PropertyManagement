@@ -19,14 +19,25 @@ apiClient.interceptors.response.use(
   (response) => response,
   (error) => {
     if (axios.isAxiosError(error) && error.response?.status === 401) {
-      // Don't redirect for login endpoints — let the form show its own error
       const url = error.config?.url || '';
-      if (!url.includes('/auth/')) {
+      // Only redirect if not already on an auth-related path or login page
+      const isAuthPath = url.includes('/auth/') || window.location.pathname.includes('/login');
+      
+      if (!isAuthPath) {
+        // Clear local session
         localStorage.removeItem('accessToken');
         localStorage.removeItem('user');
-        // Redirect to the correct login page based on current route
+        
+        // Redirect to appropriate login page
         const isAdminRoute = window.location.pathname.startsWith('/admin');
-        window.location.href = isAdminRoute ? '/admin/login' : '/login';
+        const loginPath = isAdminRoute ? '/admin/login' : '/login';
+        
+        // Use replace to avoid keeping the expired session in history
+        window.location.replace(loginPath);
+        
+        // Return a pending promise that never resolves to stop further execution 
+        // in the calling component while the page redirects
+        return new Promise(() => {});
       }
     }
     return Promise.reject(error);

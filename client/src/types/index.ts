@@ -1,7 +1,7 @@
 export interface User {
   id: string;
   email: string;
-  role: 'customer' | 'admin';
+  role: 'customer' | 'admin' | 'master_admin';
   tenantId: string;
 }
 
@@ -94,7 +94,7 @@ export interface AdminStats {
 export interface AdminUser {
   id: string;
   email: string;
-  role: 'customer' | 'admin';
+  role: 'customer' | 'admin' | 'master_admin';
   is_active: boolean;
   created_at: string;
   updated_at: string;

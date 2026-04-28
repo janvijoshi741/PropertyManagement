@@ -17,22 +17,12 @@ const options: StrategyOptionsWithoutRequest = {
 passport.use(
   new JwtStrategy(options, async (payload: JwtPayload, done) => {
     try {
-      const { data: user, error } = await supabase
-        .from('users')
-        .select('*')
-        .eq('id', payload.userId)
-        .eq('is_active', true)
-        .single();
-
-      if (error || !user) {
-        return done(null, false);
-      }
-
+      // DEMO: trust the JWT payload directly (Supabase unreachable)
       return done(null, {
-        userId: user.id,
-        email: user.email,
-        role: user.role,
-        tenantId: user.tenant_id,
+        userId: payload.userId,
+        email: payload.email,
+        role: payload.role,
+        tenantId: payload.tenantId,
       });
     } catch (err) {
       return done(err, false);

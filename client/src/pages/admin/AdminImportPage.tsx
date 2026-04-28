@@ -7,7 +7,9 @@ import { LoadingSkeleton } from '@/components/shared/LoadingSkeleton';
 import { StatusBadge } from '@/components/shared/StatusBadge';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Upload, FileSpreadsheet, CheckCircle, AlertCircle } from 'lucide-react';
+import { Upload, FileSpreadsheet, CheckCircle, AlertCircle, Building2 } from 'lucide-react';
+import { useQuery } from '@tanstack/react-query';
+import { adminApi } from '@/api/admin.api';
 import type { ImportStatus } from '@/types';
 
 interface ParsedResult {
@@ -21,8 +23,14 @@ export function AdminImportPage() {
   const [parsedResult, setParsedResult] = useState<ParsedResult | null>(null);
   const [isDragging, setIsDragging] = useState(false);
   const [fileName, setFileName] = useState('');
+  const [selectedTenantId, setSelectedTenantId] = useState('');
   const importData = useImportData();
   const { data: imports, isPending: historyLoading } = useImportHistory();
+
+  const { data: tenants = [] } = useQuery({
+    queryKey: ['adminTenants'],
+    queryFn: () => adminApi.getTenants(),
+  });
 
   const processFile = useCallback((file: File) => {
     setFileName(file.name);
@@ -63,7 +71,7 @@ export function AdminImportPage() {
       if (result.success) {
         validRows.push(result.data);
       } else {
-        const errorMsgs = result.error.errors.map((e) => `${e.path.join('.')}: ${e.message}`).join('; ');
+        const errorMsgs = result.error.issues.map((issue: any) => `${issue.path.join('.')}: ${issue.message}`).join('; ');
         errors.push({ row: index + 1, message: errorMsgs });
       }
     });
@@ -92,9 +100,13 @@ export function AdminImportPage() {
   };
 
   const handleConfirmImport = () => {
-    if (!parsedResult || parsedResult.validRows.length === 0) return;
+    if (!parsedResult || parsedResult.validRows.length === 0 || !selectedTenantId) return;
     importData.mutate(
-      { filename: fileName, rows: parsedResult.validRows as unknown as Record<string, unknown>[] },
+      { 
+        filename: fileName, 
+        targetTenantId: selectedTenantId,
+        rows: parsedResult.validRows as unknown as Record<string, unknown>[] 
+      },
       {
         onSuccess: () => {
           setParsedResult(null);
@@ -118,9 +130,8 @@ export function AdminImportPage() {
       <Card className="mb-8">
         <CardContent className="pt-6">
           <div
-            className={`border-2 border-dashed rounded-lg p-8 text-center transition-colors ${
-              isDragging ? 'border-emerald-400 bg-emerald-50' : 'border-slate-200 hover:border-slate-300'
-            }`}
+            className={`border-2 border-dashed rounded-lg p-8 text-center transition-colors ${isDragging ? 'border-primary bg-primary/5' : 'border-slate-200 hover:border-slate-300'
+              }`}
             onDragOver={(e) => { e.preventDefault(); setIsDragging(true); }}
             onDragLeave={() => setIsDragging(false)}
             onDrop={handleDrop}
@@ -128,15 +139,19 @@ export function AdminImportPage() {
             <Upload className="h-10 w-10 text-slate-400 mx-auto mb-3" />
             <p className="text-sm text-slate-600 mb-2">
               Drag and drop your file here, or{' '}
-              <label className="text-emerald-600 hover:underline cursor-pointer font-medium">
+              <label
+                htmlFor="file-upload"
+                className="text-primary hover:underline cursor-pointer font-medium"
+              >
                 browse
-                <input
-                  type="file"
-                  accept=".csv,.xlsx"
-                  onChange={handleFileInput}
-                  className="hidden"
-                />
               </label>
+              <input
+                id="file-upload"
+                type="file"
+                accept=".csv,.xlsx"
+                onChange={handleFileInput}
+                className="sr-only"
+              />
             </p>
             <p className="text-xs text-slate-400">Supports CSV and Excel (.xlsx) files</p>
           </div>
@@ -152,7 +167,7 @@ export function AdminImportPage() {
                 <FileSpreadsheet className="h-5 w-5" /> {fileName}
               </CardTitle>
               <div className="flex gap-4 text-sm">
-                <span className="flex items-center gap-1 text-emerald-600">
+                <span className="flex items-center gap-1 text-primary">
                   <CheckCircle className="h-4 w-4" /> {parsedResult.validRows.length} valid
                 </span>
                 {parsedResult.errors.length > 0 && (
@@ -205,15 +220,42 @@ export function AdminImportPage() {
               </div>
             )}
 
-            <Button
-              className="w-full bg-emerald-600 hover:bg-emerald-700"
-              disabled={parsedResult.validRows.length === 0 || importData.isPending}
-              onClick={handleConfirmImport}
-            >
-              {importData.isPending
-                ? 'Importing...'
-                : `Confirm Import — ${parsedResult.validRows.length} rows`}
-            </Button>
+            <div className="mb-4">
+              <label className="block text-sm font-medium text-slate-700 mb-1">Select Target Client</label>
+              <select
+                className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                value={selectedTenantId}
+                onChange={(e) => setSelectedTenantId(e.target.value)}
+              >
+                <option value="" disabled>-- Select a client --</option>
+                {tenants.map(t => (
+                  <option key={t.id} value={t.id}>{t.name}</option>
+                ))}
+              </select>
+            </div>
+
+            <div className="flex gap-4">
+              <Button
+                variant="outline"
+                className="flex-1"
+                disabled={importData.isPending}
+                onClick={() => {
+                  setParsedResult(null);
+                  setFileName('');
+                }}
+              >
+                Cancel
+              </Button>
+              <Button
+                className="flex-[2] bg-primary hover:bg-primary/90"
+                disabled={parsedResult.validRows.length === 0 || importData.isPending || !selectedTenantId}
+                onClick={handleConfirmImport}
+              >
+                {importData.isPending
+                  ? 'Importing...'
+                  : `Confirm Import — ${parsedResult.validRows.length} rows`}
+              </Button>
+            </div>
           </CardContent>
         </Card>
       )}

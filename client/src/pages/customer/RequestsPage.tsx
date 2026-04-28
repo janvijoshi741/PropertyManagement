@@ -19,7 +19,7 @@ export function RequestsPage() {
           <h1 className="text-2xl font-bold text-slate-800">My Requests</h1>
           <p className="text-slate-500 mt-1">Track your service requests</p>
         </div>
-        <Button className="bg-emerald-600 hover:bg-emerald-700" onClick={() => navigate('/requests/new')}>
+        <Button className="bg-primary hover:bg-primary/90" onClick={() => navigate('/requests/new')}>
           <Plus className="h-4 w-4 mr-2" /> New Request
         </Button>
       </div>
@@ -32,7 +32,7 @@ export function RequestsPage() {
           title="No requests yet"
           description="Submit a request to get started."
           action={
-            <Button className="bg-emerald-600 hover:bg-emerald-700" onClick={() => navigate('/requests/new')}>
+            <Button className="bg-primary hover:bg-primary/90" onClick={() => navigate('/requests/new')}>
               <Plus className="h-4 w-4 mr-2" /> Submit Request
             </Button>
           }

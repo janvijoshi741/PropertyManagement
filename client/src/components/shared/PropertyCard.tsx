@@ -41,7 +41,7 @@ export function PropertyCard({ property }: PropertyCardProps) {
       </CardContent>
       <CardFooter className="pt-0">
         <Button
-          className="w-full bg-emerald-600 hover:bg-emerald-700 text-white"
+          className="w-full bg-primary hover:bg-primary/90 text-white"
           onClick={() => navigate(`/properties/${property.id}`)}
         >
           View Property

@@ -9,6 +9,7 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '
 import { Building2, ArrowLeft, Mail } from 'lucide-react';
 import { emailSchema, type EmailFormData } from '@/schemas/auth.schema';
 import { useRequestOtp, useVerifyOtp } from '@/hooks/useAuth';
+import { useTheme } from '@/context/ThemeContext';
 
 export function LoginPage() {
   const [step, setStep] = useState<'email' | 'otp'>('email');
@@ -43,6 +44,8 @@ export function LoginPage() {
   const handleResend = () => {
     requestOtp.mutate(email);
   };
+
+
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-50 via-white to-emerald-50 p-4">
@@ -92,7 +95,7 @@ export function LoginPage() {
                   />
                   <Button
                     type="submit"
-                    className="w-full bg-emerald-600 hover:bg-emerald-700"
+                    className="w-full bg-primary hover:bg-primary/90"
                     disabled={requestOtp.isPending}
                   >
                     {requestOtp.isPending ? 'Sending...' : 'Send Access Code'}
@@ -147,7 +150,7 @@ export function LoginPage() {
                 </div>
                 <Button
                   type="submit"
-                  className="w-full bg-emerald-600 hover:bg-emerald-700"
+                  className="w-full bg-primary hover:bg-primary/90"
                   disabled={verifyOtp.isPending}
                 >
                   {verifyOtp.isPending ? 'Verifying...' : 'Verify Code'}
@@ -164,7 +167,7 @@ export function LoginPage() {
                     type="button"
                     onClick={handleResend}
                     disabled={requestOtp.isPending}
-                    className="text-emerald-600 hover:text-emerald-700 font-medium"
+                    className="text-primary hover:text-primary/90 font-medium"
                   >
                     Resend Code
                   </button>

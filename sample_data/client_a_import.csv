@@ -1,0 +1,3 @@
+external_ref,address_line1,address_line2,city,postcode,property_type,customer_email,customer_name,invoice_number,invoice_amount,invoice_status,invoice_issue_date,invoice_due_date
+PROP-A-001,10 Downing Street,,London,SW1A 2AA,residential,alice.smith@example.com,Alice Smith,INV-A-1001,1500,unpaid,2026-04-01,2026-04-30
+PROP-A-002,221B Baker Street,Apt 1,London,NW1 6XE,residential,bob.jones@example.com,Bob Jones,INV-A-1002,1200,paid,2026-04-01,2026-04-30

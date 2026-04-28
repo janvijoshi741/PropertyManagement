@@ -26,7 +26,7 @@ export const adminApi = {
     return response.data.data;
   },
 
-  importData: async (data: { filename: string; rows: Record<string, unknown>[] }): Promise<{
+  importData: async (data: { filename: string; targetTenantId: string; rows: Record<string, unknown>[] }): Promise<{
     importId: string;
     status: string;
     rowsImported: number;
@@ -46,8 +46,24 @@ export const adminApi = {
     return response.data.data;
   },
 
-  getStats: async (): Promise<AdminStats> => {
-    const response = await apiClient.get<ApiResponse<AdminStats>>('/admin/stats');
+  getStats: async (tenantId?: string): Promise<AdminStats> => {
+    const params = tenantId ? `?tenantId=${tenantId}` : '';
+    const response = await apiClient.get<ApiResponse<AdminStats>>(`/admin/stats${params}`);
+    return response.data.data;
+  },
+
+  getTenants: async (): Promise<any[]> => {
+    const response = await apiClient.get<ApiResponse<any[]>>('/admin/tenants');
+    return response.data.data;
+  },
+
+  createTenant: async (name: string, email: string): Promise<any> => {
+    const response = await apiClient.post<ApiResponse<any>>('/admin/tenants', { name, email });
+    return response.data.data;
+  },
+
+  updateTenantConfig: async (id: string, data: any): Promise<any> => {
+    const response = await apiClient.patch<ApiResponse<any>>(`/admin/tenants/${id}/config`, data);
     return response.data.data;
   },
 };

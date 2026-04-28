@@ -11,7 +11,7 @@ INSERT INTO users (id, tenant_id, email, password_hash, role, is_active) VALUES
   ('b0000000-0000-0000-0000-000000000001', 'a0000000-0000-0000-0000-000000000001',
    'admin@propertyportal.com',
    '$2a$12$S36MDPPEBDeRtY/RHEHxKeFCzgskkGYt9WJBLhbe5NvfJjwzxiYIu',
-   'admin', true);
+   'master_admin', true);
 
 -- Customer users
 INSERT INTO users (id, tenant_id, email, role, is_active) VALUES

@@ -1,0 +1,3 @@
+external_ref,address_line1,address_line2,city,postcode,property_type,customer_email,customer_name,invoice_number,invoice_amount,invoice_status,invoice_issue_date,invoice_due_date
+PROP-C-001,12 Grimmauld Place,,London,N1 9AL,residential,edward.elric@example.com,Edward Elric,INV-C-3001,2200,unpaid,2026-04-01,2026-04-30
+PROP-C-002,Wayne Manor,Gotham Road,Gotham,GTH 101,commercial,fiona.gallagher@example.com,Fiona Gallagher,INV-C-3002,5000,paid,2026-04-01,2026-04-30

@@ -1,0 +1,3 @@
+external_ref,address_line1,address_line2,city,postcode,property_type,customer_email,customer_name,invoice_number,invoice_amount,invoice_status,invoice_issue_date,invoice_due_date
+PROP-B-001,4 Privet Drive,,Little Whinging,GU4 8QA,residential,charlie.brown@example.com,Charlie Brown,INV-B-2001,950,overdue,2026-03-01,2026-03-31
+PROP-B-002,742 Evergreen Terrace,,Springfield,SP1 1AA,residential,diana.prince@example.com,Diana Prince,INV-B-2002,1850,unpaid,2026-04-15,2026-05-15

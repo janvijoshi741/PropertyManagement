@@ -53,11 +53,14 @@ export function StatementDetailPage() {
             </div>
           </div>
           <Separator />
-          <Button variant="outline" className="w-full" asChild>
-            <a href={statement.document_url || '#'} target="_blank" rel="noopener noreferrer">
-              <Download className="h-4 w-4 mr-2" /> Download Statement
-            </a>
-          </Button>
+          <a
+            href={statement.document_url || '#'}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="group/button inline-flex shrink-0 items-center justify-center rounded-lg border border-border bg-background hover:bg-muted hover:text-foreground text-sm font-medium whitespace-nowrap transition-all outline-none select-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 active:translate-y-px h-8 gap-1.5 px-2.5 w-full"
+          >
+            <Download className="h-4 w-4 mr-2" /> Download Statement
+          </a>
         </CardContent>
       </Card>
     </div>

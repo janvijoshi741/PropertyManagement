@@ -8,6 +8,7 @@ export const importRowSchema = z.object({
   postcode: z.string().min(1, 'Postcode is required'),
   property_type: z.string().min(1, 'Property type is required'),
   customer_email: z.string().email('Invalid customer email').optional(),
+  customer_name: z.string().optional(),
   invoice_number: z.string().optional(),
   invoice_amount: z.union([z.string(), z.number()]).optional(),
   invoice_status: z.enum(['unpaid', 'paid', 'overdue']).optional(),
@@ -17,6 +18,7 @@ export const importRowSchema = z.object({
 
 export const importDataSchema = z.object({
   filename: z.string().min(1, 'Filename is required'),
+  targetTenantId: z.string().uuid('Invalid tenant ID').optional(),
   rows: z.array(importRowSchema).min(1, 'At least one row is required'),
 });
 

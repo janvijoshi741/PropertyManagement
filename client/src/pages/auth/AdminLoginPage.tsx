@@ -25,18 +25,18 @@ export function AdminLoginPage() {
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 p-4">
       <div className="w-full max-w-md">
         <div className="text-center mb-8">
-          <div className="inline-flex items-center justify-center rounded-xl bg-emerald-600 p-3 mb-4 shadow-lg">
+          <div className="inline-flex items-center justify-center rounded-xl p-3 mb-4 shadow-lg bg-slate-900 border border-slate-700">
             <Shield className="h-8 w-8 text-white" />
           </div>
-          <h1 className="text-2xl font-bold text-white">Admin Portal</h1>
-          <p className="text-slate-400 mt-1">PropertyPortal Administration</p>
+          <h1 className="text-2xl font-bold text-white">Master Admin Portal</h1>
+          <p className="text-slate-400 mt-1">Property Management Administration</p>
         </div>
 
         <Card className="shadow-2xl border-slate-700 bg-slate-800/50 backdrop-blur">
           <CardHeader className="text-center">
             <CardTitle className="text-xl text-white">Sign In</CardTitle>
             <CardDescription className="text-slate-400">
-              Enter your admin credentials
+              Enter your master admin credentials
             </CardDescription>
           </CardHeader>
           <CardContent>
@@ -85,7 +85,7 @@ export function AdminLoginPage() {
                 />
                 <Button
                   type="submit"
-                  className="w-full bg-emerald-600 hover:bg-emerald-700"
+                  className="w-full bg-slate-900 hover:bg-slate-950 text-white border border-slate-700 transition-all"
                   disabled={adminLogin.isPending}
                 >
                   {adminLogin.isPending ? 'Signing in...' : 'Sign In'}

@@ -7,9 +7,14 @@ import { newRequestSchema, type NewRequestFormData } from '@/schemas/request.sch
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
 import { LoadingSkeleton } from '@/components/shared/LoadingSkeleton';
+
+const REQUEST_TYPES = [
+  { value: 'pet_request', label: 'Pet Request' },
+  { value: 'alteration_request', label: 'Alteration Request' },
+  { value: 'general_enquiry', label: 'General Enquiry' },
+];
 
 export function NewRequestPage() {
   const navigate = useNavigate();
@@ -57,20 +62,20 @@ export function NewRequestPage() {
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Property</FormLabel>
-                    <Select onValueChange={field.onChange} defaultValue={field.value}>
-                      <FormControl>
-                        <SelectTrigger>
-                          <SelectValue placeholder="Select a property" />
-                        </SelectTrigger>
-                      </FormControl>
-                      <SelectContent>
+                    <FormControl>
+                      <select
+                        value={field.value}
+                        onChange={(e) => field.onChange(e.target.value)}
+                        className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                      >
+                        <option value="">Select a property</option>
                         {(properties || []).map((p) => (
-                          <SelectItem key={p.id} value={p.id}>
-                            {p.address_line1}, {p.city}
-                          </SelectItem>
+                          <option key={p.id} value={p.id}>
+                            {p.address_line1}, {p.city} — {p.postcode}
+                          </option>
                         ))}
-                      </SelectContent>
-                    </Select>
+                      </select>
+                    </FormControl>
                     <FormMessage />
                   </FormItem>
                 )}
@@ -82,18 +87,20 @@ export function NewRequestPage() {
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Request Type</FormLabel>
-                    <Select onValueChange={field.onChange} defaultValue={field.value}>
-                      <FormControl>
-                        <SelectTrigger>
-                          <SelectValue placeholder="Select request type" />
-                        </SelectTrigger>
-                      </FormControl>
-                      <SelectContent>
-                        <SelectItem value="pet_request">Pet Request</SelectItem>
-                        <SelectItem value="alteration_request">Alteration Request</SelectItem>
-                        <SelectItem value="general_enquiry">General Enquiry</SelectItem>
-                      </SelectContent>
-                    </Select>
+                    <FormControl>
+                      <select
+                        value={field.value || ''}
+                        onChange={(e) => field.onChange(e.target.value)}
+                        className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                      >
+                        <option value="">Select request type</option>
+                        {REQUEST_TYPES.map((rt) => (
+                          <option key={rt.value} value={rt.value}>
+                            {rt.label}
+                          </option>
+                        ))}
+                      </select>
+                    </FormControl>
                     <FormMessage />
                   </FormItem>
                 )}
@@ -131,7 +138,7 @@ export function NewRequestPage() {
                 </Button>
                 <Button
                   type="submit"
-                  className="flex-1 bg-emerald-600 hover:bg-emerald-700"
+                  className="flex-1 bg-primary hover:bg-primary/90"
                   disabled={createRequest.isPending}
                 >
                   {createRequest.isPending ? 'Submitting...' : 'Submit Request'}

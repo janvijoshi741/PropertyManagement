@@ -5,18 +5,21 @@ import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 import { Separator } from '@/components/ui/separator';
 import { Badge } from '@/components/ui/badge';
-import { LayoutDashboard, Users, MessageSquare, Upload, LogOut, Menu, Shield } from 'lucide-react';
+import { Shield, LayoutDashboard, Users, MessageSquare, Upload, LogOut, Menu, History, Building2 } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { useTheme } from '@/context/ThemeContext';
 
 const navItems = [
   { to: '/admin/dashboard', label: 'Dashboard', icon: LayoutDashboard },
+  { to: '/admin/clients', label: 'Clients', icon: Building2 },
   { to: '/admin/users', label: 'Users', icon: Users },
   { to: '/admin/requests', label: 'Requests', icon: MessageSquare },
-  { to: '/admin/import', label: 'Import Data', icon: Upload },
+  { to: '/admin/audit', label: 'Audit Logs', icon: History },
 ];
 
 function SidebarContent({ onNavClick }: { onNavClick?: () => void }) {
   const { logout } = useAuth();
+  const { branding } = useTheme();
   const navigate = useNavigate();
 
   const handleLogout = () => {
@@ -27,13 +30,24 @@ function SidebarContent({ onNavClick }: { onNavClick?: () => void }) {
   return (
     <div className="flex h-full flex-col bg-slate-900 text-white">
       <div className="p-6">
-        <div className="flex items-center gap-2">
-          <div className="rounded-lg bg-emerald-600 p-2">
-            <Shield className="h-5 w-5 text-white" />
-          </div>
+        <div className="flex items-center gap-3">
+          {branding?.logo_url ? (
+            <img src={branding.logo_url} alt={branding.name} className="h-8 w-auto" />
+          ) : (
+            <div className="rounded-lg p-2" style={{ backgroundColor: 'var(--primary, #0f172a)' }}>
+              <Shield className="h-5 w-5 text-white" />
+            </div>
+          )}
           <div>
-            <span className="text-lg font-bold">PropertyPortal</span>
-            <Badge className="ml-2 bg-emerald-600 text-white text-[10px] px-1.5">Admin</Badge>
+            <span className="text-lg font-bold">
+              {branding?.name || 'Portal'}
+            </span>
+            <Badge 
+              className="ml-2 text-white text-[10px] px-1.5"
+              style={{ backgroundColor: 'var(--primary, #0f172a)' }}
+            >
+              Master
+            </Badge>
           </div>
         </div>
       </div>
@@ -48,7 +62,7 @@ function SidebarContent({ onNavClick }: { onNavClick?: () => void }) {
               cn(
                 'flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-colors',
                 isActive
-                  ? 'bg-slate-800 text-emerald-400'
+                  ? 'bg-emerald-600/10 text-emerald-400 shadow-sm'
                   : 'text-slate-300 hover:bg-slate-800 hover:text-white'
               )
             }
@@ -70,6 +84,7 @@ function SidebarContent({ onNavClick }: { onNavClick?: () => void }) {
 
 export function AdminLayout() {
   const [sheetOpen, setSheetOpen] = useState(false);
+  const { branding } = useTheme();
 
   return (
     <div className="min-h-screen bg-slate-50">
@@ -90,9 +105,15 @@ export function AdminLayout() {
             <SidebarContent onNavClick={() => setSheetOpen(false)} />
           </SheetContent>
         </Sheet>
-        <div className="flex items-center gap-2">
-          <Shield className="h-5 w-5 text-emerald-400" />
-          <span className="font-bold text-white">Admin Portal</span>
+        <div className="flex items-center gap-3">
+          {branding?.logo_url ? (
+            <img src={branding.logo_url} alt={branding.name} className="h-6 w-auto" />
+          ) : (
+            <Shield className="h-5 w-5 text-emerald-400" />
+          )}
+          <span className="font-bold text-white">
+            {branding?.name ? `${branding.name} Admin` : 'Admin Portal'}
+          </span>
         </div>
       </header>
 

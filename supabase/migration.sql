@@ -19,7 +19,7 @@ CREATE TABLE users (
   tenant_id UUID REFERENCES tenants(id),
   email TEXT UNIQUE NOT NULL,
   password_hash TEXT,
-  role TEXT NOT NULL CHECK (role IN ('customer', 'admin')),
+  role TEXT NOT NULL CHECK (role IN ('customer', 'admin', 'master_admin')),
   is_active BOOLEAN NOT NULL DEFAULT TRUE,
   created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
   updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()

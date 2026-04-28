@@ -1,0 +1,96 @@
+// Shared in-memory demo data store used by both customer and admin routes
+
+export const DEMO_PROPERTIES = [
+  {
+    id: "prop-001",
+    tenant_id: "demo-tenant-001",
+    external_ref: "EXT-101",
+    address_line1: "42 Baker Street",
+    address_line2: "Flat 3",
+    city: "London",
+    postcode: "NW1 6XE",
+    property_type: "Apartment",
+    created_at: "2025-08-15T10:00:00Z",
+    outstanding_invoice_count: 2,
+  },
+  {
+    id: "prop-002",
+    tenant_id: "demo-tenant-001",
+    external_ref: "EXT-102",
+    address_line1: "15 Victoria Road",
+    address_line2: null,
+    city: "Manchester",
+    postcode: "M1 4HG",
+    property_type: "Terraced House",
+    created_at: "2025-09-01T10:00:00Z",
+    outstanding_invoice_count: 1,
+  },
+  {
+    id: "prop-003",
+    tenant_id: "demo-tenant-001",
+    external_ref: "EXT-103",
+    address_line1: "7 Castle Lane",
+    address_line2: "Unit B",
+    city: "Birmingham",
+    postcode: "B3 1SZ",
+    property_type: "Studio",
+    created_at: "2025-10-20T10:00:00Z",
+    outstanding_invoice_count: 0,
+  },
+];
+
+export const demoServiceRequests: any[] = [
+  {
+    id: "req-001",
+    tenant_id: "demo-tenant-001",
+    user_id: "demo-user-001",
+    property_id: "prop-001",
+    request_type: "pet_request",
+    status: "in_review",
+    notes:
+      "Requesting permission to keep a small dog (Cocker Spaniel) in the flat.",
+    created_at: "2026-03-20T14:30:00Z",
+    updated_at: "2026-03-22T09:00:00Z",
+    users: { email: "janvij@200oksolutions.com" },
+    properties: {
+      address_line1: "42 Baker Street",
+      city: "London",
+      postcode: "NW1 6XE",
+    },
+  },
+  {
+    id: "req-002",
+    tenant_id: "demo-tenant-001",
+    user_id: "demo-user-001",
+    property_id: "prop-002",
+    request_type: "alteration_request",
+    status: "submitted",
+    notes:
+      "Would like to repaint the living room walls from white to light grey.",
+    created_at: "2026-04-10T11:00:00Z",
+    updated_at: "2026-04-10T11:00:00Z",
+    users: { email: "janvij@200oksolutions.com" },
+    properties: {
+      address_line1: "15 Victoria Road",
+      city: "Manchester",
+      postcode: "M1 4HG",
+    },
+  },
+  {
+    id: "req-003",
+    tenant_id: "demo-tenant-001",
+    user_id: "demo-user-002",
+    property_id: "prop-003",
+    request_type: "general_enquiry",
+    status: "resolved",
+    notes: "Question about recycling collection schedule for the building.",
+    created_at: "2026-02-05T16:45:00Z",
+    updated_at: "2026-02-08T10:30:00Z",
+    users: { email: "sarah.johnson@example.com" },
+    properties: {
+      address_line1: "7 Castle Lane",
+      city: "Birmingham",
+      postcode: "B3 1SZ",
+    },
+  },
+];
