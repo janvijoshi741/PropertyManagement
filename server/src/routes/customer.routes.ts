@@ -48,7 +48,7 @@ router.get("/tenant-branding", async (req: Request, res: Response) => {
       data: {
         name: "Property Management Portal",
         logo_url: "https://raw.githubusercontent.com/lucide-icons/lucide/main/icons/shield.svg",
-        primary_color: "#0F172A", 
+        primary_color: "#0F172A",
         secondary_color: "#1E293B",
         font_family: "Inter"
       }
@@ -825,7 +825,7 @@ router.get("/documents/:type/:id/view", async (req: Request, res: Response) => {
 
     // 2. Generate PDF
     const { DocumentService } = await import("../services/document.service");
-    const pdfBuffer = await DocumentService.generate(type as 'invoice' | 'statement', id);
+    const pdfBuffer = await DocumentService.generate(type as 'invoice' | 'statement', id as string);
 
     // 3. Stream to response
     res.setHeader("Content-Type", "application/pdf");

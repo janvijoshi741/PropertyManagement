@@ -15,14 +15,14 @@ export class DocumentService {
    */
   static async generate(resourceType: 'invoice' | 'statement', resourceId: string): Promise<Buffer> {
     const table = resourceType === 'invoice' ? 'invoices' : 'statements';
-    
+
     // 1. Fetch resource data
     const { data: resource, error: resError } = await supabase
       .from(table)
       .select("*, properties(*)")
       .eq("id", resourceId)
       .single();
-      
+
     if (resError || !resource) throw new Error(`${resourceType} not found`);
 
     // 2. Fetch tenant branding
@@ -48,8 +48,8 @@ export class DocumentService {
       propertyAddress: address,
       tenantBranding: {
         name: branding.name,
-        logo_url: branding.logo_url,
-        primary_color: branding.primary_color
+        logo_url: (branding as { logo_url: string }).logo_url,
+        primary_color: (branding as { primary_color: string }).primary_color
       }
     };
 
