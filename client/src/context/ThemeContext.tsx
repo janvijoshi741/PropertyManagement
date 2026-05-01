@@ -1,4 +1,5 @@
-import React, { createContext, useContext, useEffect, useState } from 'react';
+import React, { createContext, useContext, useEffect } from 'react';
+import { useQuery } from '@tanstack/react-query';
 import { useAuth } from './AuthContext';
 import apiClient from '@/api/apiClient';
 
@@ -13,58 +14,52 @@ interface TenantBranding {
 interface ThemeContextType {
   branding: TenantBranding | null;
   loading: boolean;
-  refreshBranding: () => Promise<void>;
+  refreshBranding: () => void;
 }
 
 const ThemeContext = createContext<ThemeContextType>({
   branding: null,
   loading: false,
-  refreshBranding: async () => {},
+  refreshBranding: () => {},
 });
 
 export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const { user } = useAuth();
-  const [branding, setBranding] = useState<TenantBranding | null>(null);
-  const [loading, setLoading] = useState(false);
+  const { user, isAdmin } = useAuth();
 
-  const fetchBranding = async () => {
-    if (!user) return;
-    setLoading(true);
-    try {
+  const { data: branding, isLoading, refetch } = useQuery({
+    queryKey: ['tenantBranding', user?.id],
+    queryFn: async () => {
       const response = await apiClient.get('/tenant-branding');
-      const data = response.data.data;
-      setBranding(data);
-
-      if (data.primary_color) {
-        document.documentElement.style.setProperty('--primary', data.primary_color);
-      }
-      if (data.secondary_color) {
-        document.documentElement.style.setProperty('--secondary', data.secondary_color);
-      }
-      if (data.font_family) {
-        document.documentElement.style.setProperty('--font-sans', `${data.font_family}, sans-serif`);
-      }
-    } catch (error) {
-      console.error('Failed to fetch tenant branding:', error);
-    } finally {
-      setLoading(false);
-    }
-  };
+      return response.data.data as TenantBranding;
+    },
+    enabled: !!user && !isAdmin,
+  });
 
   useEffect(() => {
-    if (user) {
-      fetchBranding();
+    // Only apply branding if user is NOT a master admin
+    if (branding && !isAdmin) {
+      if (branding.primary_color) {
+        document.documentElement.style.setProperty('--primary', branding.primary_color);
+      }
+      if (branding.secondary_color) {
+        document.documentElement.style.setProperty('--secondary', branding.secondary_color);
+      }
+      if (branding.font_family) {
+        document.documentElement.style.setProperty('--font-sans', `${branding.font_family}, sans-serif`);
+      }
     } else {
-      setBranding(null);
-      // Reset to defaults
+      // Reset to defaults if logged out or if user is a master admin
       document.documentElement.style.removeProperty('--primary');
       document.documentElement.style.removeProperty('--secondary');
       document.documentElement.style.removeProperty('--font-sans');
     }
-  }, [user]);
+  }, [branding, user, isAdmin]);
+
+  // For admins, we explicitly return null branding to prevent any stale data leaks
+  const effectiveBranding = !isAdmin && branding ? branding : null;
 
   return (
-    <ThemeContext.Provider value={{ branding, loading, refreshBranding: fetchBranding }}>
+    <ThemeContext.Provider value={{ branding: effectiveBranding, loading: isLoading, refreshBranding: refetch }}>
       {children}
     </ThemeContext.Provider>
   );

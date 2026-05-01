@@ -28,6 +28,9 @@ apiClient.interceptors.response.use(
         localStorage.removeItem('accessToken');
         localStorage.removeItem('user');
         
+        // Dispatch a custom event to notify AuthContext
+        window.dispatchEvent(new CustomEvent('auth:logout'));
+        
         // Redirect to appropriate login page
         const isAdminRoute = window.location.pathname.startsWith('/admin');
         const loginPath = isAdminRoute ? '/admin/login' : '/login';

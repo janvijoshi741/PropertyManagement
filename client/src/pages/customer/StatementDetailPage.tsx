@@ -54,7 +54,7 @@ export function StatementDetailPage() {
           </div>
           <Separator />
           <a
-            href={statement.document_url || '#'}
+            href={`/api/documents/statement/${statement.id}/view?token=${localStorage.getItem('accessToken')}`}
             target="_blank"
             rel="noopener noreferrer"
             className="group/button inline-flex shrink-0 items-center justify-center rounded-lg border border-border bg-background hover:bg-muted hover:text-foreground text-sm font-medium whitespace-nowrap transition-all outline-none select-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 active:translate-y-px h-8 gap-1.5 px-2.5 w-full"

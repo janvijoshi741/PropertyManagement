@@ -787,4 +787,54 @@ router.get(
   },
 );
 
+// GET /api/documents/:type/:id/view — dynamic PDF generation
+router.get("/documents/:type/:id/view", async (req: Request, res: Response) => {
+  const { type, id } = req.params;
+  const userId = req.user!.userId;
+
+  if (type !== 'invoice' && type !== 'statement') {
+    res.status(400).json({ error: "Invalid document type" });
+    return;
+  }
+
+  try {
+    // 1. Verify access (copying logic from detail routes for simplicity)
+    const table = type === 'invoice' ? 'invoices' : 'statements';
+    const { data: resource } = await supabase
+      .from(table)
+      .select("property_id")
+      .eq("id", id)
+      .single();
+
+    if (!resource) {
+      res.status(404).json({ error: "Document not found" });
+      return;
+    }
+
+    const { data: link } = await supabase
+      .from("user_properties")
+      .select("property_id")
+      .eq("user_id", userId)
+      .eq("property_id", resource.property_id)
+      .single();
+
+    if (!link) {
+      res.status(403).json({ error: "Access denied" });
+      return;
+    }
+
+    // 2. Generate PDF
+    const { DocumentService } = await import("../services/document.service");
+    const pdfBuffer = await DocumentService.generate(type as 'invoice' | 'statement', id);
+
+    // 3. Stream to response
+    res.setHeader("Content-Type", "application/pdf");
+    res.setHeader("Content-Disposition", `inline; filename=${type}-${id.slice(0, 8)}.pdf`);
+    res.send(pdfBuffer);
+  } catch (error: any) {
+    console.error("PDF generation failed:", error);
+    res.status(500).json({ error: "Failed to generate document" });
+  }
+});
+
 export default router;

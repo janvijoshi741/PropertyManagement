@@ -1,4 +1,5 @@
-import { createContext, useContext, useState, useCallback, type ReactNode } from 'react';
+import { createContext, useContext, useState, useCallback, useEffect, type ReactNode } from 'react';
+import { queryClient } from '@/lib/queryClient';
 import type { User } from '@/types';
 
 interface AuthContextType {
@@ -35,8 +36,15 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const logout = useCallback(() => {
     localStorage.removeItem('accessToken');
     localStorage.removeItem('user');
+    queryClient.clear();
     setState({ user: null, accessToken: null });
   }, []);
+
+  useEffect(() => {
+    const handleLogout = () => logout();
+    window.addEventListener('auth:logout', handleLogout);
+    return () => window.removeEventListener('auth:logout', handleLogout);
+  }, [logout]);
 
   const value: AuthContextType = {
     user: state.user,

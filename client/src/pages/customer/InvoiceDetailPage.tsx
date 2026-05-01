@@ -91,7 +91,13 @@ export function InvoiceDetailPage() {
               <Button 
                 variant="outline" 
                 className="flex-1 h-12" 
-                render={<a href={invoice.document_url || '#'} target="_blank" rel="noopener noreferrer" />}
+                render={
+                  <a 
+                    href={`/api/documents/invoice/${invoice.id}/view?token=${localStorage.getItem('accessToken')}`} 
+                    target="_blank" 
+                    rel="noopener noreferrer" 
+                  />
+                }
               >
                 <Download className="h-4 w-4 mr-2" /> Download Invoice
               </Button>

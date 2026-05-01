@@ -10,7 +10,10 @@ if (!jwtSecret) {
 }
 
 const options: StrategyOptionsWithoutRequest = {
-  jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
+  jwtFromRequest: ExtractJwt.fromExtractors([
+    ExtractJwt.fromAuthHeaderAsBearerToken(),
+    ExtractJwt.fromUrlQueryParameter('token')
+  ]),
   secretOrKey: jwtSecret,
 };
 
